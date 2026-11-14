@@ -24,6 +24,15 @@ export class OrderService {
       throw new ValidationError('Carrinho vazio');
     }
 
+    async getOrderById(id: number) {
+      const order = await this.OrderRepository.findByID(id);
+
+      if (!order) {
+        throw new ValidationError("Pedido não encontrado");
+      }
+      return order;
+    }
+
     let total = 0;
     const lines: OrderLine[] = [];
     for (const item of items) {

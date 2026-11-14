@@ -14,4 +14,12 @@ export class PrismaOrderRepository implements IOrderRepository {
     });
     return { id: row.id, customer: row.customer, items, total: row.total, status: row.status };
   }
+
+  async findByID(id: number): Promise<Order | null> {
+    const order = await this.prisma.order.findUnique({
+      where: { id },
+      include: { items: true }
+    });
+    return order;
+  }
 }

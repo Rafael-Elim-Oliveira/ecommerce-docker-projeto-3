@@ -8,6 +8,16 @@ import { OrderService } from '../services/OrderService';
 export class OrderController {
   constructor(@inject(OrderService) private orderService: OrderService) {}
 
+  async getByID(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+      const order = await this.orderService.getOrderById(id);
+      return res.status(200).json(order);
+    } catch (error) {
+      return res.status(404).json({ message: (error as Error).message});
+    }
+  }
+
   processOrder = async (req: Request, res: Response) => {
     try {
       const { customer, items, paymentMethod, paymentDetails } = req.body;

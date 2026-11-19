@@ -2,17 +2,20 @@
 
 ## Como rodar
 
+1. Configure o ambiente
 ```bash
-npm install
-cp .env.example .env docker compose up --build
+npm install             //instala as dependências
+cp .env.example .env    //copia as variáveis de ambiente
+```
+2. Suba os containers
+```bash
+docker compose up --build -d
 ```
 
 A API sobe em `http://localhost:3000`.
 
-Subir containers:
-```bash
-docker compose up --build -d
-```
+## Como testar
+
 Criar pedido:
 
 ```bash
@@ -29,6 +32,7 @@ Buscar pedido:
 ```bash
 curl -i http://localhost:3000/orders/1
 ```
+
 Se não existir Id:
 ```bash
 curl -i http://localhost:3000/orders/999

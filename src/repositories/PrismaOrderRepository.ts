@@ -15,11 +15,19 @@ export class PrismaOrderRepository implements IOrderRepository {
     return { id: row.id, customer: row.customer, items, total: row.total, status: row.status };
   }
 
-  async findByID(id: number): Promise<Order | null> {
+  async findById(id: number): Promise<Order | null> {
     const order = await this.prisma.order.findUnique({
       where: { id },
-      include: { items: true }
     });
-    return order;
+
+    if (!order) return null;
+
+    return {
+      id: order.id,
+      customer: order.customer,
+      items: JSON.parse(order.items) as OrderLine[],
+      total: order.total,
+      status: order.status,
+    };
   }
 }

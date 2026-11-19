@@ -9,6 +9,6 @@ app.use(express.json());
 
 app.post('/orders', orderController.processOrder);
 
-app.get("/orders/:id", (req, res) => orderController.getByID(req, res));
+app.get("/orders/:id", (req, res) => orderController.getById(req, res));
 
 export default app;

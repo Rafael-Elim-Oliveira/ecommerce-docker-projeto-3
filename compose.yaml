@@ -1,27 +1,27 @@
 services:
   banco:
-    image: postegres: 16-alpine
+    image: postgres:16-alpine
     environment:
       POSTGRES_USER: ecommerce
       POSTGRES_PASSWORD: ecommerce
-      POSTEGGRES_DB: ecommerce
+      POSTGRES_DB: ecommerce
     volumes:
       - pgdata:/var/lib/postgresql/data
-    heallthcheck:
+    healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ecommerce -d ecommerce"]
       interval: 5s
       timeout: 5s
       retries: 5
 
-api:
-  build: .
-  ports:
-    - "3000:3000"
-  env_file:
-    - .env
-  depends_on:
-    banco:
-      condition: service_healthy
+  api:
+    build: .
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    depends_on:
+      banco:
+        condition: service_healthy
 
 volumes:
   pgdata:

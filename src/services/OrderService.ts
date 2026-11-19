@@ -1,7 +1,7 @@
 import { inject, injectable } from 'inversify';
 import { TYPES } from '../container/types';
 import logger from '../lib/logger';
-import { ValidationError } from '../domain/errors';
+import { ValidationError, NotFoundError } from '../domain/errors';
 import { OrderItem, OrderLine } from '../domain/Order';
 import { ProductFactory } from '../domain/ProductFactory';
 import { IProductRepository } from '../repositories/IProductRepository';
@@ -18,19 +18,19 @@ export class OrderService {
     @inject(NotificationService) private notification: NotificationService,
   ) {}
 
+  async getOrderById(id: number) {
+      const order = await this.orders.findById(id);
+
+    if (!order) {
+        throw new NotFoundError("Pedido não encontrado");
+    }
+      return order;
+    }
+    
   async placeOrder(customer: string, items: OrderItem[], paymentMethod: string, paymentDetails: any) {
     if (!items || items.length === 0) {
       logger.error('Tentativa de pedido sem itens');
       throw new ValidationError('Carrinho vazio');
-    }
-
-    async getOrderById(id: number) {
-      const order = await this.OrderRepository.findByID(id);
-
-      if (!order) {
-        throw new ValidationError("Pedido não encontrado");
-      }
-      return order;
     }
 
     let total = 0;
